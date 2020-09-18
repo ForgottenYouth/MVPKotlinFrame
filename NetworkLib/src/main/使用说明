@@ -1,0 +1,80 @@
+NetWorkLib 网络封装库使用说明：
+
+依赖库的版本配置：
+
+注意:在根目录的build.gradle 最底部加入
+
+    project.ext {
+        compileSdkVersion = 28
+        retrofitVersion = "2.4.0"
+        gsonVersion = "2.8.2"
+        cookieVersion = "v1.0.1"
+    }
+
+1、API  接口是用于与服务器进行交互的接口定义位置，不同的项目可以再此处定义接口
+
+
+2、NetWorkClient 是网络请求的入口，可以再此处配置网络相关的参数
+
+   RxJava+Retrofit 混合使用的网络请求
+
+
+3、APIResponse是对网络返回的数据进行拆分的自定义RxJava Object
+
+
+例如：
+     .subscribe(object :APIResponse<LoginResponseBean>(){
+                     override fun success(data: LoginResponseBean) {
+                         TODO("Not yet implemented")
+                         //请求成功回调
+                     }
+
+                     override fun failure(errorMessage: String?, errorCode: Int) {
+                         TODO("Not yet implemented")
+                         //请求失败
+                     }
+
+                     override fun showLoadingDialog() {
+                         TODO("Not yet implemented")
+                         //此处新增加载中的对话框
+                     }
+
+                     override fun dismissLoadingDialog() {
+                         TODO("Not yet implemented")
+                         //此处作关闭对话框
+                     }
+
+                 })
+
+4、NetResponseBaseWrapperBean 网络返回的数据封装bean,不同的接口需要传递对应的data bean
+
+
+使用示例：
+
+
+        NetWorkClient.instance.instanceRetrofit(API::class.java)
+            .login<NetResponseBaseWrapperBean<LoginResponseBean>>("Derry-vip","123456")
+            .subscribeOn(Schedulers.io()) // 给上面请求服务器的操作，分配异步线程
+            .observeOn(AndroidSchedulers.mainThread()) // 给下面更新UI操作，分配main线程
+            .subscribe(object :APIResponse<LoginResponseBean>(){
+                override fun success(data: LoginResponseBean) {
+                    TODO("Not yet implemented")
+                    //请求成功回调
+                }
+
+                override fun failure(errorMessage: String?, errorCode: Int) {
+                    TODO("Not yet implemented")
+                    //请求失败
+                }
+
+                override fun showLoadingDialog() {
+                    TODO("Not yet implemented")
+                    //此处新增加载中的对话框
+                }
+
+                override fun dismissLoadingDialog() {
+                    TODO("Not yet implemented")
+                    //此处作关闭对话框
+                }
+
+            })

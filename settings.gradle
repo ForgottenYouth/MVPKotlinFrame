@@ -1,0 +1,3 @@
+include ':NetworkLib'
+include ':app'
+rootProject.name = "MVPKotlinFrame"
